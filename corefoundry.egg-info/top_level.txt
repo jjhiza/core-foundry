@@ -1,3 +1,0 @@
-agent_adapters
-corefoundry
-examples

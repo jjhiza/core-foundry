@@ -1,9 +1,0 @@
-LICENSE
-README.md
-main.py
-pyproject.toml
-core_foundry.egg-info/PKG-INFO
-core_foundry.egg-info/SOURCES.txt
-core_foundry.egg-info/dependency_links.txt
-core_foundry.egg-info/requires.txt
-core_foundry.egg-info/top_level.txt

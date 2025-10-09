@@ -1,3 +1,10 @@
+"""
+Example text processing tools for CoreFoundry.
+
+This module demonstrates how to create and register tools using the
+@registry.register decorator.
+"""
+
 from corefoundry.core import registry
 
 
