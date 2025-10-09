@@ -12,6 +12,10 @@ CoreFoundry eliminates the boilerplate from building AI agents with tools. Defin
 - **Type-Safe**: Built on Pydantic for schema validation
 - **Extensible**: Easy-to-implement adapter pattern for any LLM provider
 
+## Important: Global Registry
+
+⚠️ **CoreFoundry uses a global tool registry.** All Agent instances share the same registered tools. This is fine for single-user applications, but requires consideration in multi-tenant environments. [Read more about registry isolation →](#global-registry)
+
 ## Why CoreFoundry?
 
 **Problem**: Building AI agents with tools requires tons of repetitive boilerplate code.
@@ -201,6 +205,50 @@ agent = Agent(
 )
 ```
 
+### Async Tools
+
+CoreFoundry supports both synchronous and asynchronous tools. You're responsible for handling async execution in your application.
+
+**Registering async tools:**
+
+```python
+import httpx
+from corefoundry import registry
+
+@registry.register(
+    description="Fetch content from a URL",
+    input_schema={
+        "properties": {"url": {"type": "string"}},
+        "required": ["url"]
+    }
+)
+async def fetch_url(url: str) -> str:
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        return response.text
+```
+
+**Using async tools:**
+
+```python
+import asyncio
+from corefoundry import Agent
+
+agent = Agent("MyAgent", auto_tools_pkg="my_tools")
+
+# Option 1: Await directly in async context
+async def main():
+    result = await agent.call_tool("fetch_url", url="https://example.com")
+    print(result)
+
+asyncio.run(main())
+
+# Option 2: Run in event loop
+result = asyncio.run(agent.call_tool("fetch_url", url="https://example.com"))
+```
+
+**Note:** `call_tool()` returns a coroutine when calling async tools. You must `await` it or run it in an event loop. CoreFoundry doesn't automatically handle async execution - that's your application's responsibility.
+
 ### Adapters
 
 Adapters integrate the registry with specific LLM providers. CoreFoundry includes an OpenAI adapter, and you can create your own:
@@ -307,10 +355,27 @@ Discover and register tools from a package.
    agent = Agent(auto_tools_pkg=pkg)
    ```
 
-3. **Global Registry**: The registry is a global singleton. In multi-tenant applications, tools are shared across all Agent instances. Consider:
-   - Creating separate processes for different tenants
-   - Implementing your own registry isolation
-   - Carefully controlling tool registration
+3. **Global Registry**: The registry is a global singleton. In multi-tenant applications, tools are shared across all Agent instances.
+
+   **What this means:**
+
+   ```python
+   # Agent A registers admin tools
+   agent_a = Agent("Admin", auto_tools_pkg="admin_tools")
+   # Tools: delete_file, restart_server, etc.
+
+   # Agent B in the same process can also access admin tools
+   agent_b = Agent("Guest", auto_tools_pkg="guest_tools")
+   # agent_b.call_tool("delete_file", ...) will work!
+   ```
+
+   **If you're building multi-tenant systems, consider:**
+   - Using separate processes for different tenants/users
+   - Deploying isolated containers per tenant
+   - Implementing authorization checks within tool functions
+   - Being very careful about what gets registered globally
+
+   **This is by design** - CoreFoundry reduces boilerplate, not orchestration. Multi-tenant isolation is the application's responsibility.
 
 4. **Input Validation**: While CoreFoundry validates schema structure, it does NOT automatically validate tool inputs at runtime. Implement input validation in your tool functions:
 
@@ -399,6 +464,7 @@ Contributions welcome! Please:
 ## Roadmap
 
 - [ ] Additional LLM adapters (Anthropic, local models)
+  - [x] Anthropic adapter
 - [ ] Runtime input validation against schemas
 - [ ] Tool composition and chaining helpers
 - [ ] Per-agent registry isolation option

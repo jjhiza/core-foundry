@@ -47,7 +47,8 @@ class ToolDefinition(BaseModel):
 
         input_schema: JSON Schema defining the tool's input parameters
 
-        callable: The actual Python function to execute (excluded from serialization)
+        callable: The actual Python function to execute
+        (excluded from serialization)
     """
 
     name: str
