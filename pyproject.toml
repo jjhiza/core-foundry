@@ -1,0 +1,15 @@
+[project]
+name = "corefoundry"
+authors = [{name="jjhiza"}]
+version = "0.1.0"
+description = "A lightweight, LLM-agnostic tool registry and agent framework."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["pydantic>=2.0"]
+
+[project.optional-dependencies]
+adapters = ["openai>=1.0.0"]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "build"]
+build-backend = "setuptools.build_meta"

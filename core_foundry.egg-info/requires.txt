@@ -1,0 +1,4 @@
+pydantic>=2.0
+
+[adapters]
+openai>=1.0.0
