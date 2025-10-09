@@ -330,17 +330,29 @@ Discover and register tools from a package.
 ## Project Structure
 
 ```
-corefoundry/
-   corefoundry/          # Core package
-      __init__.py
-      core.py          # Registry and tool definitions
-      agent.py         # Agent wrapper
-   agent_adapters/      # Optional LLM adapters
-      base.py          # Base adapter class
-      openai_adapter.py
-   examples/            # Example usage
-      demo.py
-   tests/              # Test suite
+├── corefoundry/                       # core package (LLM-agnostic)
+│   ├── __init__.py
+│   ├── core.py                        # registry, models, autodiscover
+│   └── agent.py                       # agent wrapper / executor
+│
+├── agent_adapters/                    # optional adapters (separate package)
+│   ├── __init__.py
+│   ├── base.py
+│   └── openai_adapter.py
+│
+├── examples/
+│   ├── my_tools/
+│   │   ├── __init__.py
+│   │   └── text_tools.py
+│   └── demo.py
+│
+├── tests/
+│   ├── test_registry.py
+│   └── test_agent.py
+│
+├── pyproject.toml
+├── README.md
+└── LICENSE
 ```
 
 ## Development
@@ -396,7 +408,3 @@ Contributions welcome! Please:
 
 - **Issues**: https://github.com/jjhiza/corefoundry/issues
 - **Discussions**: https://github.com/jjhiza/corefoundry/discussions
-
----
-
-Built with d for the AI agent community.
