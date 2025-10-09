@@ -1,8 +1,8 @@
 # CoreFoundry
 
-A lightweight, LLM-agnostic tool registry and agent framework for Python.
+A lightweight, LLM-agnostic micro-framework for AI agent tool management.
 
-CoreFoundry eliminates the boilerplate from building AI agents with tools. Define tools with a simple decorator, auto-discover them from packages, and let CoreFoundry handle all the schema management and serialization.
+CoreFoundry eliminates the boilerplate from building AI agents with tools. Define tools with a simple decorator, auto-discover them from packages, and let CoreFoundry handle all the schema management and serialization. As a micro-framework, CoreFoundry focuses solely on tool definition and management - not agent orchestration.
 
 ## Features
 
@@ -79,7 +79,20 @@ def to_uppercase(text: str) -> str:
 - ✅ Runtime tool execution
 - ✅ Clean separation of concerns
 
-And as a bonus, it works with **any LLM provider** - OpenAI, Anthropic, local models, or your own custom integration.
+**CoreFoundry is a micro-framework** - it handles tool management, not agent orchestration. You stay in control of your application architecture while CoreFoundry eliminates the tool definition boilerplate.
+
+And it works with **any LLM provider** - OpenAI, Anthropic, local models, or your own custom integration.
+
+## Design Philosophy
+
+CoreFoundry is intentionally minimal:
+
+- **Focused scope**: Tool definition and management only - no orchestration, no conversation handling, no agent runtime
+- **You stay in control**: No hidden magic, no architectural constraints, no opinionated workflows
+- **Composable**: Works alongside any agent framework (LangChain, CrewAI, custom solutions) or standalone
+- **Reduces friction, not flexibility**: Eliminates boilerplate while letting you build agents your way
+
+If you need full agent orchestration, consider frameworks like LangChain or MCP. If you just want to define tools without the ceremony, CoreFoundry is for you.
 
 ## Installation
 
@@ -463,12 +476,10 @@ Contributions welcome! Please:
 
 ## Roadmap
 
-- [ ] Additional LLM adapters (Anthropic, local models)
+- [ ] Additional LLM adapters (local models, etc.)
+  - [x] OpenAI adapter
   - [x] Anthropic adapter
 - [ ] Runtime input validation against schemas
-- [ ] Tool composition and chaining helpers
-- [ ] Per-agent registry isolation option
-- [ ] Async tool support
 
 ## Support
 
