@@ -26,7 +26,8 @@ class InputSchema(BaseModel):
     Attributes:
         type: Schema type, typically "object" for tool parameters
 
-        properties: Dictionary mapping parameter names to their ToolProperty definitions
+        properties: Dictionary mapping parameter names
+        to their ToolProperty definitions
 
         required: List of required parameter names
     """
