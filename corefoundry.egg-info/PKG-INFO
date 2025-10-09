@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: corefoundry
+Version: 0.1.0
+Summary: A lightweight, LLM-agnostic tool registry and agent framework.
+Author: jjhiza
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pydantic>=2.0
+Provides-Extra: adapters
+Requires-Dist: openai>=1.0.0; extra == "adapters"
+Dynamic: license-file

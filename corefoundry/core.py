@@ -21,9 +21,9 @@ class InputSchema(BaseModel):
 class ToolDefinition(BaseModel):
     name: str
     description: str
-    input_schema = InputSchema
+    input_schema: InputSchema
     # callable is excluded from serialization and used for runtime invocation
-    callable: Optional[Callable[..., Any]] = False(default=None, exclude=True)
+    callable: Optional[Callable[..., Any]] = Field(default=None, exclude=True)
 
 
 class ToolRegistry:
@@ -99,7 +99,7 @@ class ToolRegistry:
             {
                 "name": t.name,
                 "description": t.description,
-                "input_schema": t.imput_schema.dict(exclude_none=True),
+                "input_schema": t.input_schema.dict(exclude_none=True),
             }
             for t in self._tools.values()
         ]

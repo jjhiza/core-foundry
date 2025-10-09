@@ -1,0 +1,17 @@
+LICENSE
+README.md
+pyproject.toml
+agent_adapters/__init__.py
+agent_adapters/base.py
+agent_adapters/openai_adapter.py
+corefoundry/__init__.py
+corefoundry/agent.py
+corefoundry/core.py
+corefoundry.egg-info/PKG-INFO
+corefoundry.egg-info/SOURCES.txt
+corefoundry.egg-info/dependency_links.txt
+corefoundry.egg-info/requires.txt
+corefoundry.egg-info/top_level.txt
+examples/demo.py
+tests/test_agent.py
+tests/test_registry.py
