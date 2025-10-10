@@ -168,7 +168,7 @@ print(result)  # "HELLO WORLD"
 ### 3. Use with an LLM (Optional)
 
 ```python
-from agent_adapters import OpenAIAdapter
+from agent_adapters.openai_adapter import OpenAIAdapter
 from openai import OpenAI
 
 client = OpenAI(api_key="your-api-key")
