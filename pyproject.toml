@@ -1,6 +1,6 @@
 [project]
 name = "corefoundry"
-version = "0.2.0"
+version = "0.2.1"
 description = "A lightweight, LLM-agnostic micro-framework for AI agent tool management."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -22,10 +22,10 @@ classifiers = [
 dependencies = ["pydantic>=2.0"]
 
 [project.urls]
-Homepage = "https://github.com/jjhiza/corefoundry"
-Repository = "https://github.com/jjhiza/corefoundry"
-Issues = "https://github.com/jjhiza/corefoundry/issues"
-Documentation = "https://github.com/jjhiza/corefoundry#readme"
+Homepage = "https://github.com/jjhiza/core-foundry"
+Repository = "https://github.com/jjhiza/core-foundry"
+Issues = "https://github.com/jjhiza/core-foundry/issues"
+Documentation = "https://github.com/jjhiza/core-foundry#readme"
 
 [tool.setuptools]
 packages = ["corefoundry", "agent_adapters"]
