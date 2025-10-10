@@ -439,7 +439,7 @@ Discover and register tools from a package.
 
 ```bash
 # Clone the repository
-git clone https://github.com/jjhiza/corefoundry.git
+git clone https://github.com/jjhiza/core-foundry.git
 cd corefoundry
 
 # Install in editable mode (uv handles virtual environment automatically)
