@@ -4,20 +4,34 @@ import pkgutil
 import importlib
 
 from typing import Any, List, Dict, Callable, Optional
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, model_validator
 
 
 class ToolProperty(BaseModel):
     """A single property in a tool's input schema
 
     Attributes:
-        type: The JSON Schema type (e.g., "string", "integer", "boolean")
-
+        type: The JSON Schema type (e.g., "string", "integer", "boolean", "array", "object")
         description: Optional description of what this property represents
+        items: Schema definition for array items (required when type is "array")
+        enum: List of allowed values for enum types
+        properties: Schema definitions for object properties (when type is "object")
+        required: List of required property names (when type is "object")
     """
 
     type: str
     description: Optional[str] = None
+    items: Optional[Dict[str, Any]] = None
+    enum: Optional[List[Any]] = None
+    properties: Optional[Dict[str, Any]] = None
+    required: Optional[List[str]] = None
+
+    @model_validator(mode='after')
+    def validate_schema_requirements(self):
+        """Validate OpenAPI 3.0 schema requirements"""
+        if self.type == "array" and self.items is None:
+            raise ValueError("items field is required when type is 'array'")
+        return self
 
 
 class InputSchema(BaseModel):
@@ -35,6 +49,22 @@ class InputSchema(BaseModel):
     type: str = "object"
     properties: Dict[str, ToolProperty] = Field(default_factory=dict)
     required: List[str] = Field(default_factory=list)
+
+    @model_validator(mode='before')
+    @classmethod
+    def convert_property_dicts(cls, data):
+        """Convert raw property dictionaries to ToolProperty instances"""
+        if isinstance(data, dict) and 'properties' in data:
+            properties = data['properties']
+            if isinstance(properties, dict):
+                converted_properties = {}
+                for prop_name, prop_def in properties.items():
+                    if isinstance(prop_def, dict):
+                        converted_properties[prop_name] = ToolProperty(**prop_def)
+                    else:
+                        converted_properties[prop_name] = prop_def
+                data['properties'] = converted_properties
+        return data
 
 
 class ToolDefinition(BaseModel):
