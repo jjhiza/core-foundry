@@ -17,6 +17,19 @@ class ToolProperty(BaseModel):
         enum: List of allowed values for enum types
         properties: Schema definitions for object properties (when type is "object")
         required: List of required property names (when type is "object")
+
+    Examples:
+        >>> prop = ToolProperty(type="string", description="A name")
+        >>> prop.type
+        'string'
+
+        >>> prop = ToolProperty(type="array", items={"type": "string"})
+        >>> prop.items
+        {'type': 'string'}
+
+        >>> prop = ToolProperty(type="string", enum=["a", "b"])
+        >>> prop.enum
+        ['a', 'b']
     """
 
     type: str
@@ -44,6 +57,22 @@ class InputSchema(BaseModel):
         to their ToolProperty definitions
 
         required: List of required parameter names
+
+    Examples:
+        >>> schema = InputSchema()
+        >>> schema.type
+        'object'
+        >>> schema.properties
+        {}
+
+        >>> schema = InputSchema(**{
+        ...     "properties": {"name": {"type": "string"}},
+        ...     "required": ["name"],
+        ... })
+        >>> "name" in schema.properties
+        True
+        >>> schema.required
+        ['name']
     """
 
     type: str = "object"
@@ -99,7 +128,13 @@ class ToolRegistry:
     """
 
     def __init__(self) -> None:
-        """Initialize an empty tool registry."""
+        """Initialize an empty tool registry.
+
+        Examples:
+            >>> reg = ToolRegistry()
+            >>> reg.list_names()
+            []
+        """
         self._tools: Dict[str, ToolDefinition] = {}
 
     def register(
@@ -179,6 +214,11 @@ class ToolRegistry:
 
         Returns:
             List of all ToolDefinition objects in the registry
+
+        Examples:
+            >>> reg = ToolRegistry()
+            >>> reg.get_all()
+            []
         """
         return list(self._tools.values())
 
@@ -196,7 +236,7 @@ class ToolRegistry:
             {
                 "name": t.name,
                 "description": t.description,
-                "input_schema": t.input_schema.dict(exclude_none=True),
+                "input_schema": t.input_schema.model_dump(exclude_none=True),
             }
             for t in self._tools.values()
         ]
@@ -218,7 +258,7 @@ class ToolRegistry:
         tool = self._tools.get(name)
 
         if not tool:
-            raise KeyError(f"Tool '{tool}' not found")
+            raise KeyError(f"Tool '{name}' not found")
         if tool.callable is None:
             raise RuntimeError(f"Tool '{name}' has no callable attached")
         return tool.callable
@@ -228,6 +268,11 @@ class ToolRegistry:
 
         Returns:
             List of tool names as strings
+
+        Examples:
+            >>> reg = ToolRegistry()
+            >>> reg.list_names()
+            []
         """
         return list(self._tools.keys())
 
